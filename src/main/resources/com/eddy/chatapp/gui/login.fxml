@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<Pane id="fondo" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" style="-fx-background-color: #3A3A3A;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.eddy.chatapp.gui.LoguinUIController">
+   <children>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="608.0" layoutY="80.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@login/4477.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="466.0" layoutY="335.0" text="Inicia sesión con tu contraseña" textFill="WHITE">
+         <font>
+            <Font name="Segoe UI" size="32.0" />
+         </font>
+      </Label>
+      <PasswordField fx:id="contrasenha" layoutX="503.0" layoutY="488.0" prefWidth="360.0" promptText="Contraseña">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </PasswordField>
+      <Button fx:id="loguin" layoutX="620.0" layoutY="611.0" mnemonicParsing="false" onMouseClicked="#handleButtonAction" prefHeight="40.0" prefWidth="127.0" style="-fx-background-color: #0F6CBD;" text="Iniciar sesión" textFill="WHITE">
+         <font>
+            <Font name="Segoe UI" size="16.0" />
+         </font>
+      </Button>
+   </children>
+</Pane>
