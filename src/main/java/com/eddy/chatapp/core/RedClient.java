@@ -8,32 +8,25 @@ import java.util.concurrent.*;
 
 public class RedClient {
     private static final int DISCOVERY_PORT = 7400;
-    private List<Users> connectedUsers = Collections.synchronizedList(new ArrayList<>());
-    private static final int MAX_THREADS = 50;  // Número de hilos concurrentes
-    private String selfIP; // IP de tu propio dispositivo
+    private final List<Users> connectedUsers = Collections.synchronizedList(new ArrayList<>());
+    private static final int MAX_THREADS = 50; // Número de hilos concurrentes
+    private final String selfIP; // IP del propio dispositivo
 
     public RedClient() {
-        try {
-            selfIP = InetAddress.getLocalHost().getHostAddress(); // Obtener IP del propio dispositivo
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-            selfIP = ""; // En caso de error, evita que cause problemas
-        }
+        this.selfIP = getSelfIP();
     }
 
     public List<Users> discoverUsers() {
         connectedUsers.clear();
         ExecutorService executor = Executors.newFixedThreadPool(MAX_THREADS);
-        String localSubnet;
+        String localSubnet = getLocalSubnet();
 
-        try {
-            localSubnet = getLocalSubnet();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
+        if (localSubnet == null) {
+            System.err.println("❌ No se pudo obtener la subred local.");
             return connectedUsers;
         }
 
-        List<Future<?>> futures = new ArrayList<>();
+        List<Callable<Void>> tasks = new ArrayList<>();
         for (int i = 1; i < 255; i++) {
             String host = localSubnet + i;
 
@@ -43,14 +36,16 @@ public class RedClient {
                 continue;
             }
 
-            futures.add(executor.submit(() -> scanHost(host)));
+            tasks.add(() -> {
+                scanHost(host);
+                return null;
+            });
         }
 
-        // Esperar a que todos los hilos terminen
-        for (Future<?> future : futures) {
-            try {
-                future.get(); // Espera la finalización de cada tarea
-            } catch (InterruptedException | ExecutionException ignored) {}
+        try {
+            executor.invokeAll(tasks); // Ejecuta las tareas en paralelo y espera su finalización
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
         executor.shutdown();
@@ -60,26 +55,50 @@ public class RedClient {
     private void scanHost(String host) {
         try (Socket socket = new Socket()) {
             socket.connect(new InetSocketAddress(host, DISCOVERY_PORT), 100);
-            DataInputStream in = new DataInputStream(socket.getInputStream());
 
-            // Recibir ID y nickname
-            String userId = in.readUTF();
-            String nickname = in.readUTF();
+            try (DataInputStream in = new DataInputStream(socket.getInputStream())) {
+                // Recibir ID y nickname
+                String userId = in.readUTF();
+                String nickname = in.readUTF();
 
-            // Recibir imagen de perfil
-            int imageSize = in.readInt();
-            byte[] imageBytes = new byte[imageSize];
-            in.readFully(imageBytes);
+                // Recibir imagen de perfil
+                int imageSize = in.readInt();
+                byte[] imageBytes = new byte[imageSize];
+                in.readFully(imageBytes);
 
-            connectedUsers.add(new Users(userId, nickname, imageBytes));
-
-            System.out.println("✅ Usuario encontrado en " + host);
-        } catch (IOException ignored) {}
+                connectedUsers.add(new Users(userId, nickname, imageBytes));
+                System.out.println("✅ Usuario encontrado en " + host);
+            }
+        } catch (IOException ignored) {
+        }
     }
 
-    private String getLocalSubnet() throws UnknownHostException {
-        InetAddress localHost = InetAddress.getLocalHost();
-        byte[] ip = localHost.getAddress();
-        return (ip[0] & 0xFF) + "." + (ip[1] & 0xFF) + "." + (ip[2] & 0xFF) + ".";
+    private String getLocalSubnet() {
+        try {
+            Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+            while (interfaces.hasMoreElements()) {
+                NetworkInterface iface = interfaces.nextElement();
+                Enumeration<InetAddress> addresses = iface.getInetAddresses();
+                while (addresses.hasMoreElements()) {
+                    InetAddress addr = addresses.nextElement();
+                    if (addr instanceof Inet4Address && !addr.isLoopbackAddress()) {
+                        byte[] ip = addr.getAddress();
+                        return (ip[0] & 0xFF) + "." + (ip[1] & 0xFF) + "." + (ip[2] & 0xFF) + ".";
+                    }
+                }
+            }
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
+        return null; // Devuelve null si no se encuentra una IP válida
+    }
+
+    private String getSelfIP() {
+        try {
+            return InetAddress.getLocalHost().getHostAddress();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 }
