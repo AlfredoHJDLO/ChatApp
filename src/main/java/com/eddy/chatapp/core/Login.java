@@ -1,5 +1,9 @@
 package com.eddy.chatapp.core;
 
+import com.eddy.chatapp.dao.MySQLConnector;
+import com.eddy.chatapp.dao.UsuarioDAO;
+import com.eddy.chatapp.dao.UsuarioDAOImpl;
+import com.eddy.chatapp.model.Users;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.*;
@@ -11,6 +15,7 @@ import java.io.*;
  * login y registro
  *
  * @author AlfredoHJDLO
+ * @author Ricardo Daniel Lopez Jimenez
  * @version 0.9
  * */
 public class Login {
@@ -28,11 +33,15 @@ public class Login {
      * @return Regresa {@code true} si se guardó correctamente
      * la contraseña y {@code false} si no se pudo guardar
      * */
-    public boolean registro(String contrasenha)
+    public boolean registro(String nickname, String contrasenha, byte[] image)
     {
         String hash = BCrypt.hashpw(contrasenha, BCrypt.gensalt(4));
+        UsuarioDAO user = new UsuarioDAOImpl(new MySQLConnector());
 
-        try(FileOutputStream archivo = new FileOutputStream("contra.bat");
+
+        return user.registro(new Users(nickname, hash, image,1));
+
+        /*try(FileOutputStream archivo = new FileOutputStream("contra.bat");
             ObjectOutputStream out = new ObjectOutputStream( archivo))
         {
             out.writeObject(hash);
@@ -41,7 +50,7 @@ public class Login {
         {
             e.printStackTrace();
             return false;
-        }
+        }*/
     }
 
 
@@ -55,7 +64,9 @@ public class Login {
      * */
     public boolean login(String contrasenha)
     {
-        try(FileInputStream archivo = new FileInputStream("contra.bat");
+        String hashG = new UsuarioDAOImpl(new MySQLConnector()).obtenerContra();
+        return BCrypt.checkpw(contrasenha, hashG);
+        /*try(FileInputStream archivo = new FileInputStream("contra.bat");
         ObjectInputStream in = new ObjectInputStream(archivo))
         {
             String hashG = (String) in.readObject();
@@ -65,7 +76,7 @@ public class Login {
         {
             e.printStackTrace();
             return false;
-        }
+        }*/
     }
 
 
@@ -76,7 +87,6 @@ public class Login {
      * */
     public boolean existeContra()
     {
-        File archivo = new File("contra.bat");
-        return archivo.exists();
+        return new UsuarioDAOImpl(new MySQLConnector()).Registrado();
     }
 }
