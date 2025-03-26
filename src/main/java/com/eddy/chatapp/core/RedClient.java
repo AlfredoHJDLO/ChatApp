@@ -78,10 +78,18 @@ public class RedClient {
             Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
             while (interfaces.hasMoreElements()) {
                 NetworkInterface iface = interfaces.nextElement();
+
+                // Ignorar interfaces inactivas o virtuales
+                if (!iface.isUp() || iface.isLoopback() || iface.isVirtual()) {
+                    continue;
+                }
+
                 Enumeration<InetAddress> addresses = iface.getInetAddresses();
                 while (addresses.hasMoreElements()) {
                     InetAddress addr = addresses.nextElement();
-                    if (addr instanceof Inet4Address && !addr.isLoopbackAddress()) {
+
+                    // Solo considerar direcciones IPv4 válidas (descartando localhost y redes virtuales)
+                    if (addr instanceof Inet4Address && !addr.isLoopbackAddress() && !addr.isAnyLocalAddress()) {
                         byte[] ip = addr.getAddress();
                         return (ip[0] & 0xFF) + "." + (ip[1] & 0xFF) + "." + (ip[2] & 0xFF) + ".";
                     }
@@ -90,15 +98,19 @@ public class RedClient {
         } catch (SocketException e) {
             e.printStackTrace();
         }
-        return null; // Devuelve null si no se encuentra una IP válida
+        return null; // Devuelve null si no encuentra una IP válida
     }
+
 
     private String getSelfIP() {
         try {
-            return InetAddress.getLocalHost().getHostAddress();
+            String ip = InetAddress.getLocalHost().getHostAddress();
+            System.out.println("🌐 IP detectada: " + ip);
+            return ip;
         } catch (UnknownHostException e) {
             e.printStackTrace();
             return "";
         }
     }
+
 }
