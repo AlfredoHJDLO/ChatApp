@@ -5,6 +5,14 @@ import com.eddy.chatapp.dao.UsuarioDAO;
 import java.io.*;
 import java.net.*;
 
+/**
+ * Esta administra el servidor. Es la encargada de
+ * enviar los datos como nickname y foto de perfil
+ * en la red
+ *
+ * @author Jacob Jahir Vera del Carmen
+ * @author Saul David Peña Martínez
+ * */
 public class RedServer extends Thread {
     private String userId;
     private String nickname;
