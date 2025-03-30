@@ -6,6 +6,15 @@ import java.net.*;
 import java.util.*;
 import java.util.concurrent.*;
 
+/**
+ * Esta clase es la controladora del cliente
+ * es la encargada de buscar los dispositivos
+ * conectados.
+ *
+ * @author AlfredoHJDLO
+ * @author Ricardo Daniel Lopez Jimenez
+ * @version 0.9
+ * */
 public class RedClient {
     private static final int DISCOVERY_PORT = 7400;
     private final List<Users> connectedUsers = Collections.synchronizedList(new ArrayList<>());
@@ -19,38 +28,35 @@ public class RedClient {
     public List<Users> discoverUsers() {
         connectedUsers.clear();
         ExecutorService executor = Executors.newFixedThreadPool(MAX_THREADS);
-        String localSubnet = getLocalSubnet();
+        String localSubnet;
 
-        if (localSubnet == null) {
-            System.err.println("❌ No se pudo obtener la subred local.");
-            return connectedUsers;
-        }
+        localSubnet = getLocalSubnet();
 
-        List<Callable<Void>> tasks = new ArrayList<>();
+        System.out.println("📡 Escaneando la subred: " + localSubnet);
+        System.out.println("🚫 Mi dirección IP: " + selfIP);
+
+        List<Future<?>> futures = new ArrayList<>();
         for (int i = 1; i < 255; i++) {
             String host = localSubnet + i;
 
-            // Excluir la IP propia
             if (host.equals(selfIP)) {
-                System.out.println("🛑 Saltando mi propio dispositivo: " + selfIP);
+                System.out.println("🛑 Saltando mi propio dispositivo: " + host);
                 continue;
             }
 
-            tasks.add(() -> {
-                scanHost(host);
-                return null;
-            });
+            futures.add(executor.submit(() -> scanHost(host)));
         }
 
-        try {
-            executor.invokeAll(tasks); // Ejecuta las tareas en paralelo y espera su finalización
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        for (Future<?> future : futures) {
+            try {
+                future.get();
+            } catch (InterruptedException | ExecutionException ignored) {}
         }
 
         executor.shutdown();
         return connectedUsers;
     }
+
 
     private void scanHost(String host) {
         try (Socket socket = new Socket()) {

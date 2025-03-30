@@ -13,6 +13,16 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
+
+/**
+ * Esta clase es la controladora del FXML del
+ * registro, ademas sube a base de datos la
+ * información del usuario
+ *
+ *
+ * @author Eduardo Rojas Rodriguez
+ * @author Saul David Peña Martínez
+ * */
 public class RegistroController {
 
     public byte[] archivo = null;
