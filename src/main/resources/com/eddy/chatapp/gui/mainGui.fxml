@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" style="-fx-background-color: rgba(42,42,42,0.90);" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.eddy.chatapp.gui.MainController">
+   <children>
+      <Pane layoutX="34.0" layoutY="-5.0" prefHeight="768.0" prefWidth="50.0" style="-fx-background-color: #333;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <ImageView fitHeight="32.0" fitWidth="32.0" layoutX="9.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@main/Text%20Align.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="32.0" fitWidth="32.0" layoutX="9.0" layoutY="57.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@main/Chat.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="32.0" fitWidth="32.0" layoutX="9.0" layoutY="110.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@main/Add.png" />
+               </image>
+            </ImageView>
+         </children>
+      </Pane>
+      <Pane layoutX="50.0" prefHeight="768.0" prefWidth="445.0" style="-fx-background-color: #444;" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label layoutX="62.0" layoutY="42.0" text="Nuevo Chat" textFill="WHITE">
+               <font>
+                  <Font name="Segoe UI Bold" size="32.0" />
+               </font>
+            </Label>
+            <ListView fx:id="listViewDevices" layoutX="12.0" layoutY="119.0" prefHeight="639.0" prefWidth="417.0" style="-fx-background-color: #444;" />
+         </children>
+      </Pane>
+      <AnchorPane layoutX="727.0" layoutY="43.0" prefHeight="768.0" prefWidth="874.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Pane layoutX="112.0" layoutY="-7.0" prefHeight="80.0" prefWidth="874.0" style="-fx-background-color: #2A2A2A;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <Label layoutX="78.0" layoutY="32.0" text="Nombre" textFill="WHITE">
+                     <font>
+                        <Font name="Segoe UI" size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

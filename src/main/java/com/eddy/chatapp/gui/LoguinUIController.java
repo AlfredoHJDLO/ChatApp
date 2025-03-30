@@ -27,18 +27,14 @@ public class LoguinUIController {
     private Button loguin;
 
    @FXML
-    private void handleButtonAction(ActionEvent event) {
+    private void handleButtonAction() {
        String contraseha = contrasenha.getText();
        Login login = new Login();
        if(!login.login(contraseha)) {
            errorContrasenha();
        }
        else {
-           Alert alert = new Alert(Alert.AlertType.INFORMATION);
-           alert.setTitle("Login");
-           alert.setHeaderText("Contraseña correcta");
-           alert.setContentText("La contraseña es correcta, todo ha salido bién :3");
-           alert.showAndWait();
+           CambioVentana.cambioVentana(loguin.getScene().getWindow(), "mainGui.fxml","ChatApp");
        }
    }
 
