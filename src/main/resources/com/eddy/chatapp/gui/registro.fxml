@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" style="-fx-background-color: #3A3A3A;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.eddy.chatapp.gui.RegistroController">
+   <children>
+      <ImageView fitHeight="256.0" fitWidth="256.0" layoutX="609.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@login/registro.png" />
+         </image></ImageView>
+      <Label layoutX="601.0" layoutY="300.0" text="Bienvenido :)" textFill="WHITE">
+         <font>
+            <Font name="Segoe UI" size="48.0" />
+         </font>
+      </Label>
+      <TextField fx:id="nickname" layoutX="581.0" layoutY="465.0" prefHeight="25.0" prefWidth="312.0" promptText="Nickname">
+         <font>
+            <Font name="Segoe UI" size="16.0" />
+         </font>
+      </TextField>
+      <Button layoutX="817.0" layoutY="586.0" mnemonicParsing="false" onMouseClicked="#cargarImagen" text="Seleccionar" />
+      <Label fx:id="filenameLael" layoutX="581.0" layoutY="590.0" text="Seleccione Foto de perfil" textFill="WHITE" />
+      <Button fx:id="registro" layoutX="681.0" layoutY="689.0" mnemonicParsing="false" onMouseClicked="#Registrar" style="-fx-background-color: #c3d5b9;" text="Registrarse">
+         <font>
+            <Font name="Segoe UI" size="18.0" />
+         </font>
+      </Button>
+      <PasswordField fx:id="password" layoutX="581.0" layoutY="523.0" prefHeight="29.0" prefWidth="312.0" promptText="Contraseña">
+         <font>
+            <Font name="Segoe UI" size="16.0" />
+         </font>
+      </PasswordField>
+   </children>
+</Pane>
