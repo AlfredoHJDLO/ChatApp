@@ -1,6 +1,7 @@
 package com.eddy.chatapp.dao;
 
 import com.eddy.chatapp.model.BlockedUsers;
+import com.eddy.chatapp.dao.MySQLConnector;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,7 +10,9 @@ import java.sql.SQLException;
 
 public class BlockedUserDAOImpl implements BlockedUserDAO {
     private DatabaseConnector connector;
-    public BlockedUserDAOImpl(DatabaseConnector connector) { this.connector = connector; }
+    public BlockedUserDAOImpl(DatabaseConnector connector) {
+        this.connector = connector;
+    }
 
     @Override
     public boolean addBlockedUser(BlockedUsers blockedUser){
@@ -32,6 +35,10 @@ public class BlockedUserDAOImpl implements BlockedUserDAO {
         try(Connection conn = connector.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql))
         {
+            if (conn.isClosed()) {
+                System.err.println("ERROR: La conexión está cerrada antes de ejecutar la consulta.");
+                return false;
+            }
             stmt.setString(1,mac_address);
             ResultSet rs = stmt.executeQuery();
             return rs.next();
