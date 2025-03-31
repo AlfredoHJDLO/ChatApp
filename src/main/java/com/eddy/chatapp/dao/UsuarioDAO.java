@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 public interface UsuarioDAO {
     public boolean registro(Users user);
@@ -29,4 +30,7 @@ public interface UsuarioDAO {
             return null;
         }
     }
+    public boolean addContact(Users user);
+    public boolean deleteContact(String id);
+    public List<Users> listContacts();
 }

@@ -41,8 +41,8 @@ public class RedServer extends Thread {
             // Enviar ID y nickname
             out.writeUTF(UsuarioDAO.yo().getId());
             out.writeUTF(UsuarioDAO.yo().getNickname());
-            out.writeInt(UsuarioDAO.yo().getfoto().length);
-            out.write(UsuarioDAO.yo().getfoto());
+            out.writeInt(UsuarioDAO.yo().getFoto().length);
+            out.write(UsuarioDAO.yo().getFoto());
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
