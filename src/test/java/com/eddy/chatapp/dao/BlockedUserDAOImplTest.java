@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class BlockedUserDAOImplTest {
-    private BlockedUserDAOImpl blockedUserDAO;
+    private BlockedUserDAO blockedUserDAO;
     private Connection connection;
 
     @BeforeAll
@@ -24,8 +24,9 @@ public class BlockedUserDAOImplTest {
         // Pasar un DatabaseConnector para que el DAO obtenga la conexión
         DatabaseConnector connector = () -> connection;
 
-        // Inicializar BlockedUserDAOImpl con el conector
-        blockedUserDAO = new BlockedUserDAOImpl(connector);
+        // Inicializar BlockedUserDAO con el conector
+        blockedUserDAO = new BlockedUserDAOImpl(new MySQLConnector());
+
     }
 
     @BeforeEach
