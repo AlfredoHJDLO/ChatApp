@@ -9,6 +9,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
+/**
+ * Esta clase es el controlador de la interfaz de chat.
+ * Se encarga de gestionar la interacción con el usuario y el envío de mensajes a la base de datos.
+ *
+ * @author Eduardo
+ */
 public class ChatController {
 
     @FXML
@@ -20,13 +26,21 @@ public class ChatController {
 
     private String chatUser;
 
-    // Inicialización del chat
+
+    /**
+     * Inicializa el chat estableciendo el usuario con el que se chatea.
+     *
+     * @param usuario el nombre del usuario con el que se inicia el chat
+     */
     public void initChat(String usuario) {
         this.chatUser = usuario;
         chatUserLabel.setText("Chat con: " + usuario);  // Mostrar el nombre del usuario en el encabezado
     }
 
-    // Enviar mensaje
+    /**
+     * Envía un mensaje. Este método se invoca al pulsar el botón "Enviar".
+     * El mensaje se muestra en el área de chat y se guarda en la base de datos.
+     */
     @FXML
     private void sendMessage() {
         String message = messageTextField.getText();
