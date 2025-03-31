@@ -36,3 +36,8 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+.idea/material_theme_project_new.xml
+.idea/vcs.xml
+resources/com.eddy.chatapp.gui/chat.fxml
+/src/main/resources/com/eddy/chatapp/gui/chat.fxml
