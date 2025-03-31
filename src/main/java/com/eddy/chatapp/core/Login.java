@@ -5,10 +5,7 @@ import com.eddy.chatapp.dao.UsuarioDAO;
 import com.eddy.chatapp.dao.UsuarioDAOImpl;
 import com.eddy.chatapp.model.Users;
 import org.mindrot.jbcrypt.BCrypt;
-
 import java.io.*;
-
-
 /**
  * Esta clase es la controladora del logueo con
  * contraseña del usuario, contiene 2 metodos llamados
