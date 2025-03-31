@@ -11,6 +11,7 @@ public class Users {
         this.nickname = nickname;
         this.foto = foto;
     }
+
     public Users(String nickname, String password, byte[] foto, int dif) {
         this.id = "0";
         this.nickname = nickname;
@@ -26,7 +27,7 @@ public class Users {
         return nickname;
     }
 
-    public byte[] getfoto() {
+    public byte[] getFoto() {
         return foto;
     }
 

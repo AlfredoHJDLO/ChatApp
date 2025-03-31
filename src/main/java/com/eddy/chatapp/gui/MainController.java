@@ -47,8 +47,8 @@ public class MainController {
                 }else{
                     setText(user.getNickname());
 
-                    if(user.getfoto().length > 0){
-                        Image image = new Image(new ByteArrayInputStream(user.getfoto()));
+                    if(user.getFoto().length > 0){
+                        Image image = new Image(new ByteArrayInputStream(user.getFoto()));
                         imageView.setImage(image);
                         imageView.setFitWidth(40);
                         imageView.setFitHeight(40);
