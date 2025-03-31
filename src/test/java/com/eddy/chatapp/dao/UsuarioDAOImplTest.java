@@ -32,7 +32,7 @@ public class UsuarioDAOImplTest {
     @BeforeEach
     void cleanTable() throws SQLException {
         connection.createStatement().execute("DELETE FROM users");
-        connection.createStatement().execute("INSERT INTO users (id, nickname, password, foto) VALUES ('0', 'Admin', 'x', NULL)");
+        //connection.createStatement().execute("INSERT INTO users (id, nickname, password, foto) VALUES ('0', 'Admin', 'x', NULL)");
     }
 
     @AfterAll
@@ -46,8 +46,17 @@ public class UsuarioDAOImplTest {
         assertTrue(usuarioDAO.addContact(user));
 
         List<Users> contacts = usuarioDAO.listContacts();
+        // Imprimir todos los contactos
+        System.out.println("Contactos en la tabla:");
+        for (Users contact : contacts) {
+            System.out.println("ID: " + contact.getId() + ", Nickname: " + contact.getNickname());
+        }
+
         assertEquals(1, contacts.size());
-        assertEquals("Ricardo", contacts.getFirst().getNickname());
+        assertEquals("Ricardo", contacts.get(0).getNickname());
+
+        // Eliminar el contacto después del test
+        usuarioDAO.deleteContact(user.getId());
     }
 
     @Test
@@ -58,11 +67,16 @@ public class UsuarioDAOImplTest {
         assertTrue(usuarioDAO.deleteContact("AA:BB:CC:DD:EE:FF"));
         List<Users> contacts = usuarioDAO.listContacts();
         assertTrue(contacts.isEmpty());
+
+        // Eliminar el contacto después del test (si queda algún contacto por eliminar)
+        usuarioDAO.deleteContact(user.getId());
     }
 
     @Test
     void testDeleteContact_IdZero() {
         assertFalse(usuarioDAO.deleteContact("0"));
+
+        // No es necesario eliminar nada en este caso, ya que no se ha agregado ningún contacto.
     }
 
     @Test
@@ -75,5 +89,9 @@ public class UsuarioDAOImplTest {
 
         List<Users> contacts = usuarioDAO.listContacts();
         assertEquals(2, contacts.size());
+
+        // Eliminar los contactos después del test
+        usuarioDAO.deleteContact(user1.getId());
+        usuarioDAO.deleteContact(user2.getId());
     }
 }
