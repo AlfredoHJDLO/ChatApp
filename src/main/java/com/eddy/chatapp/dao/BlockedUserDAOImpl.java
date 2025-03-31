@@ -32,7 +32,7 @@ public class BlockedUserDAOImpl implements BlockedUserDAO {
         try(Connection conn = connector.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql))
         {
-            stmt.setString(1,"0");
+            stmt.setString(1,mac_address);
             ResultSet rs = stmt.executeQuery();
             return rs.next();
         }catch (SQLException E)
