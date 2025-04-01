@@ -35,7 +35,7 @@ public class ChatServer {
         try (DataInputStream in = new DataInputStream(clientSocket.getInputStream());
              DataOutputStream out = new DataOutputStream(clientSocket.getOutputStream())) {
 
-            String remitenteMAC = MacID.obtenerId();
+            String remitenteMAC = in.readUTF();
             String mensaje = in.readUTF();
 
             // Crear el objeto mensaje

@@ -156,7 +156,11 @@ public class ChatController {
         if (!message.isEmpty()) {
             RedClient red = new RedClient();
             List<Users> lista = red.discoverUsers();
+            System.out.println(usuarioM.getId());
             Users destino = lista.stream().filter(u -> u.getId().equals(usuarioM.getId())).findFirst().orElse(null);
+            if (destino == null){
+                System.out.println("Usuario null");
+            }
 
             ChatClient mensaje = new ChatClient();
             mensaje.sendMessage(destino.getIp(), message);
