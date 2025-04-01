@@ -1,7 +1,7 @@
 package com.eddy.chatapp.dao;
 
 import com.eddy.chatapp.model.BlockedUsers;
-import com.eddy.chatapp.dao.MySQLConnector;
+//import com.eddy.chatapp.dao.SQLiteConnector;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
