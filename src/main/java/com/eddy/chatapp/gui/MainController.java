@@ -36,7 +36,6 @@ public class MainController {
     @FXML
     private void showChats() {
         Platform.runLater(() -> contentArea.getChildren().setAll(chatView));
-
     }
 
     @FXML

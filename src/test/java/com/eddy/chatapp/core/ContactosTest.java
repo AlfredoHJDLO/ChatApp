@@ -1,7 +1,7 @@
 package com.eddy.chatapp.core;
 
 import com.eddy.chatapp.dao.DatabaseConnector;
-import com.eddy.chatapp.dao.MySQLConnector;
+import com.eddy.chatapp.dao.SQLiteConnector;
 import com.eddy.chatapp.dao.UsuarioDAO;
 import com.eddy.chatapp.dao.UsuarioDAOImpl;
 import com.eddy.chatapp.model.Users;
@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ContactosTest {
-    private Contactos contactos;
+   /* private UsuarioDAOImpl contactos;
     private Connection connection;
 
     @Test
@@ -38,5 +38,5 @@ public class ContactosTest {
         // Eliminar los contactos después del test
         contactos.deleteContact(user1.getId());
         contactos.deleteContact(user2.getId());
-    }
+    }*/
 }

@@ -25,7 +25,7 @@ public class BlockedUserDAOImplTest {
         DatabaseConnector connector = () -> connection;
 
         // Inicializar BlockedUserDAO con el conector
-        blockedUserDAO = new BlockedUserDAOImpl(new MySQLConnector());
+        blockedUserDAO = new BlockedUserDAOImpl(new SQLiteConnector());
 
     }
 
