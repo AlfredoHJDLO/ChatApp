@@ -15,7 +15,7 @@ public interface UsuarioDAO {
     public String obtenerContra();
     public static Users yo(){
         String sql = "SELECT * FROM users WHERE id = 0";
-        try(Connection conn = new MySQLConnector().getConnection();
+        try(Connection conn = new SQLiteConnector().getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql))
         {
             ResultSet rs = stmt.executeQuery();
