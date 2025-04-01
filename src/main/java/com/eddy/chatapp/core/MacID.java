@@ -4,7 +4,24 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
 
+/**
+ * Esta clase obtendrá el Mac de la computadora
+ * para utilizarlo como id
+ *
+ * @author AlfredoHJDLO
+ * @author Ricardo Daniel Lopez Jimenez
+ *
+ * @version 0.9
+ * */
 public class MacID {
+
+    /**
+     * Esta función es estatica. Sirve para regresar
+     * la mac en una cadena
+     *
+     * @return Esta función regresa la cadena con la dirección
+     * mac
+     * */
     public static String obtenerId()
     {
         try {

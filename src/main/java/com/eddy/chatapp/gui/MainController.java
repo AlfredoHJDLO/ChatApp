@@ -1,20 +1,10 @@
 package com.eddy.chatapp.gui;
-
-import com.eddy.chatapp.core.RedClient;
-import com.eddy.chatapp.core.RedServer;
-import com.eddy.chatapp.model.Users;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-
-import java.io.ByteArrayInputStream;
-import java.util.List;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.layout.StackPane;
+import java.io.IOException;
 
 /**
  * Esta clase administra los eventos de la clase principal
@@ -22,30 +12,21 @@ import java.util.List;
  * @author Saul David Peña Martínez
  * */
 public class MainController {
-    private RedServer redServer;
-    private RedClient redClient;
+    @FXML
+    private StackPane contentArea;
+
+    private Node nuevoView;
+    private Node chatView;
 
     @FXML
-    private ListView<Users> listViewDevices;
+    public void initialize() throws IOException {
+        // Cargar las diferentes interfaces una sola vez
+        chatView = FXMLLoader.load(getClass().getResource("chatsR.fxml"));
+        nuevoView = FXMLLoader.load(getClass().getResource("nuevoC.fxml"));
 
-    @FXML
-    public void initialize(){
-        redServer = new RedServer();
-        redClient = new RedClient();
-        redServer.start();
-
-        startUserDiscovery();
-        listViewDevices.setCellFactory(param -> new ListCell<Users>() {
-            private ImageView imageView = new ImageView();
-
-            @Override
-            protected void updateItem(Users user, boolean empty) {
-                super.updateItem(user, empty);
-                if(empty || user == null){
-                    setText(null);
-                    setGraphic(null);
-                }else{
-                    setText(user.getNickname());
+        // Mostrar la vista de chats por defecto
+        contentArea.getChildren().setAll(chatView);
+    }
 
                     if(user.getFoto().length > 0){
                         Image image = new Image(new ByteArrayInputStream(user.getFoto()));
@@ -57,28 +38,7 @@ public class MainController {
                 }
             }
         });
-    }
 
-    private void startUserDiscovery() {
-        Task<Void> task = new Task<Void>() {
-            @Override
-            protected Void call() throws Exception {
-                while (true) {
-                    List<Users> conectados = redClient.discoverUsers();
-                    Platform.runLater(()->
-                    {
-                        listViewDevices.getItems().setAll(conectados);
-                    });
-                    try
-                    {
-                        Thread.sleep(1000);
-                    }catch (InterruptedException e){}
-                }
-            }
-        };
-        Thread thread = new Thread(task);
-        thread.setDaemon(true);
-        thread.start();
-    }
+
 
 }
