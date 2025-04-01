@@ -154,18 +154,12 @@ public class ChatController {
     private void sendMessage() {
         String message = messageTextField.getText();
         if (!message.isEmpty()) {
-            //hatTextArea.appendText("Tú: " + message + "\n");
-            //messageTextField.clear();
-
-            // Crear el objeto Message y guardarlo en la base de datos
-            // Supongamos que chatUser es el remitente y defines un destinatario fijo para la prueba
-            //String remitente = "prueba"; // chatUser se establece en initChat()
-            //String destinatario = "DestinatarioFijo"; // o puedes obtenerlo de otro control
             RedClient red = new RedClient();
             List<Users> lista = red.discoverUsers();
+            Users destino = lista.stream().filter(u -> u.getId().equals(usuarioM.getId())).findFirst().orElse(null);
 
             ChatClient mensaje = new ChatClient();
-            mensaje.sendMessage(usuarioM.getIp(), message);
+            mensaje.sendMessage(destino.getIp(), message);
             Message newMessage = new Message(usuarioM.getId(), "0", message);
 
             // Crea la conexión con la base de datos (por ejemplo, usando MySQLConnector)
