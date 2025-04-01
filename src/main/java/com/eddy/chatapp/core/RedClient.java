@@ -26,11 +26,10 @@ public class RedClient {
     }
 
     public List<Users> discoverUsers() {
-        connectedUsers.clear();
-        ExecutorService executor = Executors.newFixedThreadPool(MAX_THREADS);
-        String localSubnet;
+        Set<String> activeUserIds = Collections.synchronizedSet(new HashSet<>());
 
-        localSubnet = getLocalSubnet();
+        ExecutorService executor = Executors.newFixedThreadPool(MAX_THREADS);
+        String localSubnet = getLocalSubnet();
 
         System.out.println("📡 Escaneando la subred: " + localSubnet);
         System.out.println("🚫 Mi dirección IP: " + selfIP);
@@ -44,7 +43,7 @@ public class RedClient {
                 continue;
             }
 
-            futures.add(executor.submit(() -> scanHost(host)));
+            futures.add(executor.submit(() -> scanHost(host, activeUserIds)));
         }
 
         for (Future<?> future : futures) {
@@ -54,11 +53,14 @@ public class RedClient {
         }
 
         executor.shutdown();
+
+        // Actualizar la lista de usuarios conectados
+        connectedUsers.removeIf(user -> !activeUserIds.contains(user.getId())); // Elimina usuarios inactivos
         return connectedUsers;
     }
 
 
-    private void scanHost(String host) {
+    private void scanHost(String host, Set<String> activeUserIds) {
         try (Socket socket = new Socket()) {
             socket.connect(new InetSocketAddress(host, DISCOVERY_PORT), 100);
 
@@ -72,8 +74,17 @@ public class RedClient {
                 byte[] imageBytes = new byte[imageSize];
                 in.readFully(imageBytes);
 
-                connectedUsers.add(new Users(userId, nickname, imageBytes));
-                System.out.println("✅ Usuario encontrado en " + host);
+                synchronized (connectedUsers) {
+                    // Verificar si ya existe el usuario
+                    boolean exists = connectedUsers.stream().anyMatch(user -> user.getId().equals(userId));
+                    if (!exists) {
+                        connectedUsers.add(new Users(userId, nickname, imageBytes));
+                        System.out.println("✅ Usuario encontrado en " + host);
+                    }
+                }
+
+                // Agregar el ID del usuario a la lista de activos
+                activeUserIds.add(userId);
             }
         } catch (IOException ignored) {
         }
