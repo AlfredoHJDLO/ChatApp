@@ -7,6 +7,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UsuarioDAOImpl implements UsuarioDAO {
 
@@ -24,7 +26,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
             stmt.setString(1, user.getId());
             stmt.setString(2, user.getNickname());
             stmt.setString(3, user.getPassword());
-            stmt.setBytes(4, user.getfoto());
+            stmt.setBytes(4, user.getFoto());
             return stmt.executeUpdate() > 0;
         }catch (SQLException E)
         {
@@ -67,4 +69,5 @@ public class UsuarioDAOImpl implements UsuarioDAO {
             return null;
         }
     }
+
 }

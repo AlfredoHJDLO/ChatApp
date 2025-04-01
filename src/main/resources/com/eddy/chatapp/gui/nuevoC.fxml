@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1302.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.eddy.chatapp.gui.nuevocController">
+   <children>
+      <SplitPane dividerPositions="0.3423076923076923" prefHeight="768.0" prefWidth="1302.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                  <VBox prefHeight="768.0" prefWidth="444.0" style="-fx-background-color: #444444;">
+                     <children>
+                        <TextFlow prefHeight="100.0" prefWidth="444.0">
+                           <children>
+                              <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Nuevo chat" wrappingWidth="226.828125">
+                                 <font>
+                                    <Font name="System Bold" size="32.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                           <padding>
+                              <Insets left="47.0" top="24.0" />
+                           </padding>
+                        </TextFlow>
+                        <ListView fx:id="listViewDevices" prefHeight="675.0" prefWidth="444.0" style="-fx-background-color: #555555;" />
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                  <VBox alignment="CENTER" prefHeight="768.0" prefWidth="858.0" style="-fx-background-color: #333333;">
+                     <children>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Selecciona un contacto">
+                           <font>
+                              <Font name="System Bold" size="32.0" />
+                           </font>
+                        </Text>
+                        <Text fill="#aaaaaa" strokeType="OUTSIDE" strokeWidth="0.0" text="Para iniciar una conversación, seleccione un contacto de la lista para poder empezar a conversarPara iniciar una conversación, seleccione un contacto de la lista para poder empezar a conversar" textAlignment="CENTER" wrappingWidth="522.421875">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="768.0" prefWidth="858.0">
+                     <children>
+                        <Pane prefHeight="80.0" prefWidth="200.0" style="-fx-background-color: #2A2A2A;" />
+                        <ScrollPane prefHeight="592.0" prefWidth="200.0" style="-fx-background-color: #2A2A2A;">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
+                          </content>
+                        </ScrollPane>
+                        <Pane prefHeight="96.0" prefWidth="200.0" style="-fx-background-color: #2A2A2A;" />
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>
