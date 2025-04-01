@@ -18,22 +18,8 @@ public class ChatClient {
     private Socket socket;
     private DataInputStream in;
     private DataOutputStream out;
-    private MessageListener messageListener;
     private MessageDAO messageDAO;
 
-    public static void main(String[] args) {
-        // Ejemplo de uso: la IP del servidor es "192.168.2.120".
-        // Los parámetros para sendMessage son:
-        // 1) IP del destinatario (para envío en tiempo real; no se envía al servidor),
-        // 2) La MAC del destinatario,
-        // 3) El mensaje.
-        String serverIP = "192.168.2.138"; // Cambia a la IP del servidor
-        //ChatClient client = new ChatClient(serverIP);
-
-        // Ejemplo: se envía un mensaje al destinatario con MAC "AA-BB-CC-DD-EE-FF"
-        // y la IP del destinatario (por ejemplo, "192.168.2.121") para el envío en tiempo real.
-        //client.sendMessage("192.168.2.121", "AA-BB-CC-DD-EE-FF", "Hola desde otra PC");
-    }
     /**
      * Envía un mensaje al servidor de chat.
      *
@@ -64,38 +50,5 @@ public class ChatClient {
         } catch (IOException e) {
             System.err.println("Error al enviar el mensaje: " + e.getMessage());
         }
-    }
-
-
-    /**
-     * Configura el listener para recibir mensajes del servidor.
-     *
-     * @param listener una implementación de MessageListener para manejar mensajes entrantes
-     */
-    public void setMessageListener(MessageListener listener) {
-        this.messageListener = listener;
-    }
-
-    /**
-     * Método que escucha continuamente los mensajes enviados por el servidor.
-     */
-    private void listenForMessages() {
-        try {
-            while (true) {
-                String response = in.readUTF();
-                if (messageListener != null) {
-                    messageListener.onMessageReceived(response);
-                }
-            }
-        } catch (EOFException eof) {
-            System.out.println("La conexión se cerró (EOFException).");
-        } catch (IOException e) {e.printStackTrace();       }
-    }
-
-            /**
-             * Interfaz para manejar eventos de mensajes recibidos.
-             */
-    public interface MessageListener {
-        void onMessageReceived(String message);
     }
 }
