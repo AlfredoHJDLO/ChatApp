@@ -1,5 +1,6 @@
 package com.eddy.chatapp.gui;
 
+import com.eddy.chatapp.core.ChatClient;
 import com.eddy.chatapp.core.ChatServer;
 import com.eddy.chatapp.core.Contactos;
 import com.eddy.chatapp.dao.MessageDAO;
@@ -33,6 +34,7 @@ public class ChatController {
     @FXML
     private TextField messageTextField;  // Campo de texto para escribir nuevos mensajes
 
+    private Users usuarioM = new Users("", "", null);
     private String chatUser;
     @FXML private ListView<Users> listViewDevices;
     @FXML private VBox vboxDefault; // VBox del mensaje por defecto
@@ -72,6 +74,7 @@ public class ChatController {
             listViewDevices.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
                 if (newVal != null) {
                     // Ocultar el VBox de "Selecciona un contacto" y mostrar el chat
+                    usuarioM = newVal;
                     vboxDefault.setVisible(false);
                     vboxDefault.setManaged(false);
                     vboxChat.setVisible(true);
@@ -149,14 +152,16 @@ public class ChatController {
     private void sendMessage() {
         String message = messageTextField.getText();
         if (!message.isEmpty()) {
-            chatTextArea.appendText("Tú: " + message + "\n");
-            messageTextField.clear();
+            //hatTextArea.appendText("Tú: " + message + "\n");
+            //messageTextField.clear();
 
             // Crear el objeto Message y guardarlo en la base de datos
             // Supongamos que chatUser es el remitente y defines un destinatario fijo para la prueba
-            String remitente = "prueba"; // chatUser se establece en initChat()
-            String destinatario = "DestinatarioFijo"; // o puedes obtenerlo de otro control
-            Message newMessage = new Message(destinatario, remitente, message);
+            //String remitente = "prueba"; // chatUser se establece en initChat()
+            //String destinatario = "DestinatarioFijo"; // o puedes obtenerlo de otro control
+            ChatClient mensaje = new ChatClient();
+            mensaje.sendMessage(usuarioM.getId(), message);
+            Message newMessage = new Message(usuarioM.getId(), "0", message);
 
             // Crea la conexión con la base de datos (por ejemplo, usando MySQLConnector)
             MessageDAO messageDAO = new MessageDAOImpl(new SQLiteConnector());
