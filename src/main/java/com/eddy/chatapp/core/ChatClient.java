@@ -1,7 +1,7 @@
 package com.eddy.chatapp.core;
 
 import com.eddy.chatapp.dao.MessageDAOImpl;
-import com.eddy.chatapp.dao.MySQLConnector;
+import com.eddy.chatapp.dao.SQLiteConnector;
 import com.eddy.chatapp.model.Message;
 import com.eddy.chatapp.dao.MessageDAO;
 
@@ -45,7 +45,7 @@ public class ChatClient {
             socket = new Socket(serverIP, 7500);
             in = new DataInputStream(socket.getInputStream());
             out = new DataOutputStream(socket.getOutputStream());
-            messageDAO = new MessageDAOImpl(new MySQLConnector());
+            messageDAO = new MessageDAOImpl(new SQLiteConnector());
 
             new Thread(this::listenForMessages).start();
         } catch (IOException e) {
