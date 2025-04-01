@@ -1,7 +1,12 @@
-package com.eddy.chatapp.dao;
+package com.eddy.chatapp.core;
 
+import com.eddy.chatapp.dao.DatabaseConnector;
+import com.eddy.chatapp.dao.MySQLConnector;
+import com.eddy.chatapp.dao.UsuarioDAO;
+import com.eddy.chatapp.dao.UsuarioDAOImpl;
 import com.eddy.chatapp.model.Users;
 import org.junit.jupiter.api.*;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -10,8 +15,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class UsuarioDAOImplTest {
-    private UsuarioDAO usuarioDAO;
+public class ContactosTest {
+    private Contactos contactos;
     private Connection connection;
 
     @BeforeAll
@@ -26,7 +31,7 @@ public class UsuarioDAOImplTest {
         DatabaseConnector connector = () -> connection;
 
         // Inicializar UsuarioDAO con el conector
-        usuarioDAO = new UsuarioDAOImpl(new MySQLConnector());
+        contactos = new Contactos(new MySQLConnector());
     }
 
     @BeforeEach
@@ -43,9 +48,9 @@ public class UsuarioDAOImplTest {
     @Test
     void testAddContact() {
         Users user = new Users("FF:EE:DD:CC:BB:AA", "Ricardo", new byte[]{1, 2, 3});
-        assertTrue(usuarioDAO.addContact(user));
+        assertTrue(contactos.addContact(user));
 
-        List<Users> contacts = usuarioDAO.listContacts();
+        List<Users> contacts = contactos.listContacts();
         // Imprimir todos los contactos
         System.out.println("Contactos en la tabla:");
         for (Users contact : contacts) {
@@ -56,25 +61,25 @@ public class UsuarioDAOImplTest {
         assertEquals("Ricardo", contacts.get(0).getNickname());
 
         // Eliminar el contacto después del test
-        usuarioDAO.deleteContact(user.getId());
+        contactos.deleteContact(user.getId());
     }
 
     @Test
     void testDeleteContact() {
         Users user = new Users("AA:BB:CC:DD:EE:FF", "Juan", new byte[]{1, 2, 3});
-        usuarioDAO.addContact(user);
+        contactos.addContact(user);
 
-        assertTrue(usuarioDAO.deleteContact("AA:BB:CC:DD:EE:FF"));
-        List<Users> contacts = usuarioDAO.listContacts();
+        assertTrue(contactos.deleteContact("AA:BB:CC:DD:EE:FF"));
+        List<Users> contacts = contactos.listContacts();
         assertTrue(contacts.isEmpty());
 
         // Eliminar el contacto después del test (si queda algún contacto por eliminar)
-        usuarioDAO.deleteContact(user.getId());
+        contactos.deleteContact(user.getId());
     }
 
     @Test
     void testDeleteContact_IdZero() {
-        assertFalse(usuarioDAO.deleteContact("0"));
+        assertFalse(contactos.deleteContact("0"));
 
         // No es necesario eliminar nada en este caso, ya que no se ha agregado ningún contacto.
     }
@@ -84,14 +89,14 @@ public class UsuarioDAOImplTest {
         Users user1 = new Users("AA:BB:CC:DD:EE:FF", "Juan", new byte[]{1, 2, 3});
         Users user2 = new Users("11:22:33:44:55:66", "Maria", new byte[]{4, 5, 6});
 
-        usuarioDAO.addContact(user1);
-        usuarioDAO.addContact(user2);
+        contactos.addContact(user1);
+        contactos.addContact(user2);
 
-        List<Users> contacts = usuarioDAO.listContacts();
+        List<Users> contacts = contactos.listContacts();
         assertEquals(2, contacts.size());
 
         // Eliminar los contactos después del test
-        usuarioDAO.deleteContact(user1.getId());
-        usuarioDAO.deleteContact(user2.getId());
+        contactos.deleteContact(user1.getId());
+        contactos.deleteContact(user2.getId());
     }
 }
