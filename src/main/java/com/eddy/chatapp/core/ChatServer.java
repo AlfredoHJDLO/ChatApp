@@ -49,12 +49,13 @@ public class ChatServer {
         try (DataInputStream in = new DataInputStream(clientSocket.getInputStream());
              DataOutputStream out = new DataOutputStream(clientSocket.getOutputStream())) {
 
-            String remitente = in.readUTF();
-            String destinatario = in.readUTF();
+            String remitenteMAC = MacID.obtenerId();
+            String destinatarioIP = in.readUTF();
             String mensaje = in.readUTF();
 
-            // Crear objeto Message y guardarlo en BD
-            Message message = new Message(0, remitente, destinatario, mensaje, LocalDateTime.now());
+            String remitenteFinal = remitenteMAC.equals(destinatarioIP) ? "0" : remitenteMAC;
+
+            Message message = new Message(destinatarioIP, remitenteFinal, mensaje);
             messageDAO.saveMessage(message);
 
             out.writeUTF("✅ Mensaje recibido y guardado en la base de datos");
