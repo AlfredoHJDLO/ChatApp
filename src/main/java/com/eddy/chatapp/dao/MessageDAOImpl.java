@@ -35,7 +35,7 @@ public class MessageDAOImpl implements MessageDAO {
     @Override
     public List<Message> getMessages(String remitente, String destinatario) {
         List<Message> messages = new ArrayList<Message>();
-        String sql = "SELECT * FROM messages WHERE remitente = ? AND destinatario = ? OR remitente = ? AND destinatario = ? ORDER BY timestamp DESC";
+        String sql = "SELECT * FROM messages WHERE remitente = ? AND destinatario = ? OR remitente = ? AND destinatario = ? ORDER BY timestamp ASC";
         try(Connection conn = connector.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql))
         {
