@@ -25,9 +25,10 @@ public class RedClient {
         this.selfIP = getSelfIP();
     }
 
-    public List<Users> discoverUsers() {
-        Set<String> activeUserIds = Collections.synchronizedSet(new HashSet<>());
+    private final Map<String, Long> userLastSeen = Collections.synchronizedMap(new HashMap<>());
+    private static final int USER_TIMEOUT = 5000; // Tiempo límite para usuarios inactivos en milisegundos
 
+    public List<Users> discoverUsers() {
         ExecutorService executor = Executors.newFixedThreadPool(MAX_THREADS);
         String localSubnet = getLocalSubnet();
 
@@ -43,7 +44,7 @@ public class RedClient {
                 continue;
             }
 
-            futures.add(executor.submit(() -> scanHost(host, activeUserIds)));
+            futures.add(executor.submit(() -> scanHost(host)));
         }
 
         for (Future<?> future : futures) {
@@ -54,13 +55,16 @@ public class RedClient {
 
         executor.shutdown();
 
-        // Actualizar la lista de usuarios conectados
-        connectedUsers.removeIf(user -> !activeUserIds.contains(user.getId())); // Elimina usuarios inactivos
+        // Limpieza de usuarios inactivos
+        long currentTime = System.currentTimeMillis();
+        userLastSeen.entrySet().removeIf(entry -> (currentTime - entry.getValue()) > USER_TIMEOUT);
+        connectedUsers.removeIf(user -> !userLastSeen.containsKey(user.getId()));
+
         return connectedUsers;
     }
 
 
-    private void scanHost(String host, Set<String> activeUserIds) {
+    private void scanHost(String host) {
         try (Socket socket = new Socket()) {
             socket.connect(new InetSocketAddress(host, DISCOVERY_PORT), 100);
 
@@ -75,7 +79,6 @@ public class RedClient {
                 in.readFully(imageBytes);
 
                 synchronized (connectedUsers) {
-                    // Verificar si ya existe el usuario
                     boolean exists = connectedUsers.stream().anyMatch(user -> user.getId().equals(userId));
                     if (!exists) {
                         connectedUsers.add(new Users(userId, nickname, imageBytes));
@@ -83,8 +86,8 @@ public class RedClient {
                     }
                 }
 
-                // Agregar el ID del usuario a la lista de activos
-                activeUserIds.add(userId);
+                // Actualizar la marca de tiempo del usuario
+                userLastSeen.put(userId, System.currentTimeMillis());
             }
         } catch (IOException ignored) {
         }
