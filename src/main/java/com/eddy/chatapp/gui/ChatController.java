@@ -1,6 +1,9 @@
 package com.eddy.chatapp.gui;
 
+import com.eddy.chatapp.core.ChatClient;
+import com.eddy.chatapp.core.ChatServer;
 import com.eddy.chatapp.core.Contactos;
+import com.eddy.chatapp.core.RedClient;
 import com.eddy.chatapp.dao.MessageDAO;
 import com.eddy.chatapp.dao.MessageDAOImpl;
 import com.eddy.chatapp.dao.SQLiteConnector;
@@ -15,6 +18,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
 import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,6 +36,7 @@ public class ChatController {
     @FXML
     private TextField messageTextField;  // Campo de texto para escribir nuevos mensajes
 
+    private Users usuarioM = new Users("", "", null);
     private String chatUser;
     @FXML private ListView<Users> listViewDevices;
     @FXML private VBox vboxDefault; // VBox del mensaje por defecto
@@ -40,7 +45,9 @@ public class ChatController {
 
     @FXML
     public void initialize (){
+        startServer();
         startUsers();
+
         //System.out.println(listViewDevices);
         if (listViewDevices != null){
             listViewDevices.setCellFactory(param -> new ListCell<Users>() {
@@ -69,12 +76,18 @@ public class ChatController {
             listViewDevices.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
                 if (newVal != null) {
                     // Ocultar el VBox de "Selecciona un contacto" y mostrar el chat
+                    usuarioM = newVal;
                     vboxDefault.setVisible(false);
                     vboxDefault.setManaged(false);
                     vboxChat.setVisible(true);
                     vboxChat.setManaged(true);
+                    MessageDAOImpl men = new MessageDAOImpl(new SQLiteConnector());
+                    List<Message> mm = men.getMessages(usuarioM.getId(), "0");
+                    for(Message m :mm){
+                        chatTextArea.appendText((m.getRemitente().equals("0") ? "Yo" : m.getRemitente()) + ": " +m.getTexto() + "\n");
+                    }
 
-                    System.out.println("Mostrando chat con: " + newVal.getNickname());
+                    ChatServer.setMessageListener(this::onMessageReceived);
                 } else {
                     // Si no hay selección, mostrar el mensaje por defecto
                     vboxDefault.setVisible(true);
@@ -86,7 +99,23 @@ public class ChatController {
         }
     }
 
-    private void startUsers (){
+    private void onMessageReceived(Message message) {
+        // Asegurar que la UI se actualice en el hilo de JavaFX
+        Platform.runLater(() -> {
+            chatTextArea.appendText(message.getRemitente() + ": " + message.getTexto() + "\n");
+        });
+    }
+
+    private ChatServer chatServer;
+
+    @FXML
+    private void startServer() {
+        new Thread(() -> {
+            ChatServer.start();
+        }).start();
+    }
+
+    private void startUsers() {
         Task<Void> task = new Task<Void>() {
             @Override
             protected Void call () throws Exception {
@@ -130,18 +159,28 @@ public class ChatController {
     private void sendMessage() {
         String message = messageTextField.getText();
         if (!message.isEmpty()) {
-            chatTextArea.appendText("Tú: " + message + "\n");
-            messageTextField.clear();
+            RedClient red = new RedClient();
+            List<Users> lista = red.discoverUsers();
+            System.out.println(usuarioM.getId());
+            Users destino = lista.stream().filter(u -> u.getId().equals(usuarioM.getId())).findFirst().orElse(null);
+            if (destino == null){
+                System.out.println("Usuario null");
+            }
 
-            // Crear el objeto Message y guardarlo en la base de datos
-            // Supongamos que chatUser es el remitente y defines un destinatario fijo para la prueba
-            String remitente = "prueba"; // chatUser se establece en initChat()
-            String destinatario = "DestinatarioFijo"; // o puedes obtenerlo de otro control
-            Message newMessage = new Message(destinatario, remitente, message);
+            ChatClient mensaje = new ChatClient();
+            mensaje.sendMessage(destino.getIp(), message);
+            Message newMessage = new Message(usuarioM.getId(), "0", message);
 
             // Crea la conexión con la base de datos (por ejemplo, usando MySQLConnector)
             MessageDAO messageDAO = new MessageDAOImpl(new SQLiteConnector());
             messageDAO.saveMessage(newMessage);
+
+            chatTextArea.setText("");
+            MessageDAOImpl men = new MessageDAOImpl(new SQLiteConnector());
+            List<Message> mm = men.getMessages(usuarioM.getId(), "0");
+            for(Message m :mm){
+                chatTextArea.appendText((m.getRemitente().equals("0") ? "Yo" : m.getRemitente()) + ": " +m.getTexto() + "\n");
+            }
         }
     }
 
