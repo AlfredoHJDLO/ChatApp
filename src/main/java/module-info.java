@@ -3,8 +3,8 @@ module com.eddy.chatapp.gui {
     requires javafx.fxml;
     requires jbcrypt;
     requires java.desktop;
-    requires java.sql;
     requires thumbnailator;
+    requires org.xerial.sqlitejdbc;
 
 
     opens com.eddy.chatapp.gui to javafx.fxml;

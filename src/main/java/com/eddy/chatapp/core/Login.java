@@ -1,6 +1,7 @@
 package com.eddy.chatapp.core;
 
-import com.eddy.chatapp.dao.MySQLConnector;
+//import com.eddy.chatapp.dao.MySQLConnector;
+import com.eddy.chatapp.dao.SQLiteConnector;
 import com.eddy.chatapp.dao.UsuarioDAO;
 import com.eddy.chatapp.dao.UsuarioDAOImpl;
 import com.eddy.chatapp.model.Users;
@@ -26,14 +27,16 @@ public class Login {
      * Esta es el método registro, sive para que el usuario genere
      * su contraseña
      *
+     * @param nickname Es el string del nickname
      * @param contrasenha El string con la contraseña
+     * @param image Esta es el BLOB de la foto de perfil
      * @return Regresa {@code true} si se guardó correctamente
-     * la contraseña y {@code false} si no se pudo guardar
+     * el usuario y {@code false} si no se pudo guardar
      * */
     public boolean registro(String nickname, String contrasenha, byte[] image)
     {
         String hash = BCrypt.hashpw(contrasenha, BCrypt.gensalt(4));
-        UsuarioDAO user = new UsuarioDAOImpl(new MySQLConnector());
+        UsuarioDAO user = new UsuarioDAOImpl(new SQLiteConnector());
 
 
         return user.registro(new Users(nickname, hash, image,1));
@@ -61,7 +64,7 @@ public class Login {
      * */
     public boolean login(String contrasenha)
     {
-        String hashG = new UsuarioDAOImpl(new MySQLConnector()).obtenerContra();
+        String hashG = new UsuarioDAOImpl(new SQLiteConnector()).obtenerContra();
         return BCrypt.checkpw(contrasenha, hashG);
         /*try(FileInputStream archivo = new FileInputStream("contra.bat");
         ObjectInputStream in = new ObjectInputStream(archivo))
@@ -84,6 +87,6 @@ public class Login {
      * */
     public boolean existeContra()
     {
-        return new UsuarioDAOImpl(new MySQLConnector()).Registrado();
+        return new UsuarioDAOImpl(new SQLiteConnector()).Registrado();
     }
 }
