@@ -92,4 +92,29 @@ public class Contactos {
 
         return contacts;
     }
+//--------------------------------------------------------------------------------------------------------
+    //private RedClient redClient;
+
+    /*public Contactos() {
+        this.redClient = new RedClient();
+    }¨/
+
+
+    /**
+     * Este es el método isUserActive, sirve para verificar si un usuario está activo en la red.
+     * además de verificar si el usuario está en la lista de usuarios conectados.
+     * @param macAddress Es la dirección MAC del usuario a verificar.
+     * @return Regresa {@code true} si el usuario está activo y {@code false} en caso contrario.
+     */
+    public List<Users> isUserActive() {
+
+        List <Users> connectedUsers = listContacts();
+
+        for (Users user : connectedUsers){
+            if (user.getId() != null && !user.getId().isEmpty()) {
+                return connectedUsers;
+            }
+        }
+        return null;
+    }
 }
