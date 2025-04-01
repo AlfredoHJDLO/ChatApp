@@ -22,9 +22,9 @@ public class ChatServer {
      * Método principal para iniciar el servidor de chat.
      * Inicializa la conexión a la base de datos y entra en un ciclo de espera de clientes.
      *
-     * @param args argumentos de línea de comandos (no utilizados)
+     *
      */
-    public static void main(String[] args) {
+    public static void start() {
         // Usamos MySQLConnector como la conexión a la BD
         messageDAO = new MessageDAOImpl(new SQLiteConnector());
 
@@ -50,12 +50,11 @@ public class ChatServer {
              DataOutputStream out = new DataOutputStream(clientSocket.getOutputStream())) {
 
             String remitenteMAC = MacID.obtenerId();
-            String destinatarioIP = in.readUTF();
             String mensaje = in.readUTF();
 
-            String remitenteFinal = remitenteMAC.equals(destinatarioIP) ? "0" : remitenteMAC;
 
-            Message message = new Message(destinatarioIP, remitenteFinal, mensaje);
+
+            Message message = new Message("0", remitenteMAC, mensaje);
             messageDAO.saveMessage(message);
 
             out.writeUTF("✅ Mensaje recibido y guardado en la base de datos");
