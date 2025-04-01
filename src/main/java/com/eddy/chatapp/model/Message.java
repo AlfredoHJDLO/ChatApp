@@ -16,6 +16,7 @@ public class Message {
         this.texto = texto;
         this.timestamp = timestamp;
     }
+
     public Message(String destinatario, String remitente, String texto) {
         this.destinatario = destinatario;
         this.remitente = remitente;

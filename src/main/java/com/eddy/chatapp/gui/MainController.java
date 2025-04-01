@@ -4,6 +4,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+
 import java.io.IOException;
 
 /**
@@ -18,6 +20,9 @@ public class MainController {
     private Node nuevoView;
     private Node chatView;
 
+    @FXML private VBox vboxDefault; // VBox del mensaje por defecto
+    @FXML private VBox vboxChat;    // VBox de los mensajes
+
     @FXML
     public void initialize() throws IOException {
         // Cargar las diferentes interfaces una sola vez
@@ -28,17 +33,15 @@ public class MainController {
         contentArea.getChildren().setAll(chatView);
     }
 
-                    if(user.getFoto().length > 0){
-                        Image image = new Image(new ByteArrayInputStream(user.getFoto()));
-                        imageView.setImage(image);
-                        imageView.setFitWidth(40);
-                        imageView.setFitHeight(40);
-                    }
-                    setGraphic(imageView);
-                }
-            }
-        });
+    @FXML
+    private void showChats() {
+        Platform.runLater(() -> contentArea.getChildren().setAll(chatView));
+    }
 
+    @FXML
+    private void showNew() {
+        Platform.runLater(() -> contentArea.getChildren().setAll(nuevoView));
+    }
 
 
 }

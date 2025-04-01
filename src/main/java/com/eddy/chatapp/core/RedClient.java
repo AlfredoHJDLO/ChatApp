@@ -25,12 +25,12 @@ public class RedClient {
         this.selfIP = getSelfIP();
     }
 
-    public List<Users> discoverUsers() {
-        connectedUsers.clear();
-        ExecutorService executor = Executors.newFixedThreadPool(MAX_THREADS);
-        String localSubnet;
+    private final Map<String, Long> userLastSeen = Collections.synchronizedMap(new HashMap<>());
+    private static final int USER_TIMEOUT = 5000; // Tiempo límite para usuarios inactivos en milisegundos
 
-        localSubnet = getLocalSubnet();
+    public List<Users> discoverUsers() {
+        ExecutorService executor = Executors.newFixedThreadPool(MAX_THREADS);
+        String localSubnet = getLocalSubnet();
 
         System.out.println("📡 Escaneando la subred: " + localSubnet);
         System.out.println("🚫 Mi dirección IP: " + selfIP);
@@ -54,6 +54,12 @@ public class RedClient {
         }
 
         executor.shutdown();
+
+        // Limpieza de usuarios inactivos
+        long currentTime = System.currentTimeMillis();
+        userLastSeen.entrySet().removeIf(entry -> (currentTime - entry.getValue()) > USER_TIMEOUT);
+        connectedUsers.removeIf(user -> !userLastSeen.containsKey(user.getId()));
+
         return connectedUsers;
     }
 
@@ -72,8 +78,16 @@ public class RedClient {
                 byte[] imageBytes = new byte[imageSize];
                 in.readFully(imageBytes);
 
-                connectedUsers.add(new Users(userId, nickname, imageBytes));
-                System.out.println("✅ Usuario encontrado en " + host);
+                synchronized (connectedUsers) {
+                    boolean exists = connectedUsers.stream().anyMatch(user -> user.getId().equals(userId));
+                    if (!exists) {
+                        connectedUsers.add(new Users(userId, nickname, imageBytes, host));
+                        System.out.println("✅ Usuario encontrado en " + host);
+                    }
+                }
+
+                // Actualizar la marca de tiempo del usuario
+                userLastSeen.put(userId, System.currentTimeMillis());
             }
         } catch (IOException ignored) {
         }

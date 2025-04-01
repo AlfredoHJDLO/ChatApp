@@ -35,16 +35,18 @@ public class MessageDAOImpl implements MessageDAO {
     @Override
     public List<Message> getMessages(String remitente, String destinatario) {
         List<Message> messages = new ArrayList<Message>();
-        String sql = "SELECT * FROM messages WHERE remitente = ? AND destinatario = ? ORDER BY timestamp DESC";
+        String sql = "SELECT * FROM messages WHERE remitente = ? AND destinatario = ? OR remitente = ? AND destinatario = ? ORDER BY timestamp ASC";
         try(Connection conn = connector.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql))
         {
             stmt.setString(1, remitente);
             stmt.setString(2, destinatario);
+            stmt.setString(3, destinatario);
+            stmt.setString(4, remitente);
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                messages.add(new Message(rs.getInt("id"), rs.getString("destinatario"), rs.getString("remitente"), rs.getString("texto"), rs.getTimestamp("timestamp").toLocalDateTime()));
+                messages.add(new Message(rs.getString("destinatario"), rs.getString("remitente"), rs.getString("texto")));
             }
         }catch (SQLException E)
         {

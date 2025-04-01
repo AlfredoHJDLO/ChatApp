@@ -1,6 +1,8 @@
 package com.eddy.chatapp.core;
 
 import com.eddy.chatapp.dao.DatabaseConnector;
+import com.eddy.chatapp.dao.SQLiteConnector;
+import com.eddy.chatapp.dao.UsuarioDAOImpl;
 import com.eddy.chatapp.model.Users;
 
 import java.sql.Connection;
@@ -11,9 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Contactos {
-    private DatabaseConnector connector;
-    public Contactos(DatabaseConnector connector) {
-        this.connector = connector;
+    //private DatabaseConnector connector;
+    public Contactos(/*DatabaseConnector connector*/) {
+        //this.connector = connector;
     }
 
 //--------------------------------------------------------------------------------------------------------
@@ -32,7 +34,7 @@ public class Contactos {
      */
     public List<Users> isUserActive() {
 
-        List <Users> connectedUsers = listContacts();
+        List <Users> connectedUsers = new UsuarioDAOImpl(new SQLiteConnector()).listContacts();
 
         for (Users user : connectedUsers){
             if (user.getId() != null && !user.getId().isEmpty()) {
@@ -41,4 +43,11 @@ public class Contactos {
         }
         return null;
     }
+
+    public List<Users> listContacts() {
+        List <Users> connectedUsers = new UsuarioDAOImpl(new SQLiteConnector()).listContacts();
+        return connectedUsers;
+    }
+
+
 }

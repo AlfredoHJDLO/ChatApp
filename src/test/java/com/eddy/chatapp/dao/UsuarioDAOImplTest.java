@@ -26,7 +26,7 @@ public class UsuarioDAOImplTest {
         DatabaseConnector connector = () -> connection;
 
         // Inicializar UsuarioDAO con el conector
-        usuarioDAO = new UsuarioDAOImpl(new MySQLConnector());
+        usuarioDAO = new UsuarioDAOImpl(new SQLiteConnector());
     }
 
     @BeforeEach

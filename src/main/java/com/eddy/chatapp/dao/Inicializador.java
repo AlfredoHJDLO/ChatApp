@@ -12,19 +12,24 @@ public class Inicializador {
                 + "id INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + "destinatario TEXT NOT NULL, "
                 + "remitente TEXT NOT NULL, "
-                + "texto INTEGER NOT NULL, "
+                + "texto TEXT NOT NULL, "
                 + "timestamp DATE NOT NULL)";
 
         String createUsersTableSQL = "CREATE TABLE IF NOT EXISTS users ("
                 + "id TEXT PRIMARY KEY, "
-                + "nickname TEXT NOT NULL, "
-                + "password TEXT NOT NULL, "
-                + "foto BLOB NOT NULL)";
+                + "nickname TEXT , "
+                + "password TEXT, "
+                + "foto BLOB )";
+
+        String createBlockedUsersTableSQL = "CREATE TABLE IF NOT EXISTS blocked_users ("
+                + "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + "mac_address TEXT NOT NULL )";
 
         try (Connection connection = new SQLiteConnector().getConnection();
              Statement statement = connection.createStatement()) {
             statement.execute(createMessagesTableSQL);
             statement.execute(createUsersTableSQL);
+            statement.execute(createBlockedUsersTableSQL);
         }
     }
 }

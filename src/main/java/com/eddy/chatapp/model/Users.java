@@ -5,11 +5,19 @@ public class Users {
     private String nickname;
     private String password;
     private byte[] foto;
+    private String ip;
 
     public Users(String id, String nickname, byte[] foto) {
         this.id = id;
         this.nickname = nickname;
         this.foto = foto;
+    }
+
+    public Users(String id, String nickname, byte[] foto, String ip) {
+        this.id = id;
+        this.nickname = nickname;
+        this.foto = foto;
+        this.ip = ip;
     }
 
     public Users(String nickname, String password, byte[] foto, int dif) {
@@ -34,6 +42,8 @@ public class Users {
     public String getPassword() {
         return password;
     }
+
+    public String getIp() {return ip;}
 }
 
 
