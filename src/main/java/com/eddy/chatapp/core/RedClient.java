@@ -81,7 +81,7 @@ public class RedClient {
                 synchronized (connectedUsers) {
                     boolean exists = connectedUsers.stream().anyMatch(user -> user.getId().equals(userId));
                     if (!exists) {
-                        connectedUsers.add(new Users(userId, nickname, imageBytes));
+                        connectedUsers.add(new Users(userId, nickname, imageBytes, host));
                         System.out.println("✅ Usuario encontrado en " + host);
                     }
                 }

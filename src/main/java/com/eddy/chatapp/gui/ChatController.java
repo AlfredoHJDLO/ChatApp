@@ -3,6 +3,7 @@ package com.eddy.chatapp.gui;
 import com.eddy.chatapp.core.ChatClient;
 import com.eddy.chatapp.core.ChatServer;
 import com.eddy.chatapp.core.Contactos;
+import com.eddy.chatapp.core.RedClient;
 import com.eddy.chatapp.dao.MessageDAO;
 import com.eddy.chatapp.dao.MessageDAOImpl;
 import com.eddy.chatapp.dao.SQLiteConnector;
@@ -17,6 +18,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
 import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -159,8 +161,11 @@ public class ChatController {
             // Supongamos que chatUser es el remitente y defines un destinatario fijo para la prueba
             //String remitente = "prueba"; // chatUser se establece en initChat()
             //String destinatario = "DestinatarioFijo"; // o puedes obtenerlo de otro control
+            RedClient red = new RedClient();
+            List<Users> lista = red.discoverUsers();
+
             ChatClient mensaje = new ChatClient();
-            mensaje.sendMessage(usuarioM.getId(), message);
+            mensaje.sendMessage(usuarioM.getIp(), message);
             Message newMessage = new Message(usuarioM.getId(), "0", message);
 
             // Crea la conexión con la base de datos (por ejemplo, usando MySQLConnector)

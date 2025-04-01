@@ -72,7 +72,7 @@ public class nuevocController {
 
         // Agregar listener para cambiar entre vboxDefault y vboxChat
         listViewDevices.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
-            Users usuario = new Users(newVal.getId(), newVal.getNickname(), newVal.getFoto());
+            Users usuario = new Users(newVal.getId(), newVal.getNickname(), newVal.getFoto(), newVal.getIp());
             if (newVal != null) {
                 // Ocultar el VBox de "Selecciona un contacto" y mostrar el chat
                 Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
