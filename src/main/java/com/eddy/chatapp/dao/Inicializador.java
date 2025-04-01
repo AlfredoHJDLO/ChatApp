@@ -17,9 +17,9 @@ public class Inicializador {
 
         String createUsersTableSQL = "CREATE TABLE IF NOT EXISTS users ("
                 + "id TEXT PRIMARY KEY, "
-                + "nickname TEXT NOT NULL, "
-                + "password TEXT NOT NULL, "
-                + "foto BLOB NOT NULL)";
+                + "nickname TEXT , "
+                + "password TEXT, "
+                + "foto BLOB )";
 
         String createBlockedUsersTableSQL = "CREATE TABLE IF NOT EXISTS blocked_users ("
                 + "id INTEGER PRIMARY KEY AUTOINCREMENT, "
