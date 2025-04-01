@@ -81,6 +81,11 @@ public class ChatController {
                     vboxDefault.setManaged(false);
                     vboxChat.setVisible(true);
                     vboxChat.setManaged(true);
+                    MessageDAOImpl men = new MessageDAOImpl(new SQLiteConnector());
+                    List<Message> mm = men.getMessages(usuarioM.getId(), "0");
+                    for(Message m :mm){
+                        chatTextArea.appendText((m.getRemitente().equals("0") ? "Yo" : m.getRemitente()) + ": " +m.getTexto() + "\n");
+                    }
 
                     ChatServer.setMessageListener(this::onMessageReceived);
                 } else {
@@ -110,7 +115,7 @@ public class ChatController {
         }).start();
     }
 
-    private void startUsers (){
+    private void startUsers() {
         Task<Void> task = new Task<Void>() {
             @Override
             protected Void call () throws Exception {
@@ -169,6 +174,13 @@ public class ChatController {
             // Crea la conexión con la base de datos (por ejemplo, usando MySQLConnector)
             MessageDAO messageDAO = new MessageDAOImpl(new SQLiteConnector());
             messageDAO.saveMessage(newMessage);
+
+            chatTextArea.setText("");
+            MessageDAOImpl men = new MessageDAOImpl(new SQLiteConnector());
+            List<Message> mm = men.getMessages(usuarioM.getId(), "0");
+            for(Message m :mm){
+                chatTextArea.appendText((m.getRemitente().equals("0") ? "Yo" : m.getRemitente()) + ": " +m.getTexto() + "\n");
+            }
         }
     }
 
