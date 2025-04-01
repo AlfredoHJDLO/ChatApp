@@ -1,5 +1,6 @@
 package com.eddy.chatapp.gui;
 
+import com.eddy.chatapp.core.ChatServer;
 import com.eddy.chatapp.core.Contactos;
 import com.eddy.chatapp.dao.MessageDAO;
 import com.eddy.chatapp.dao.MessageDAOImpl;
@@ -40,7 +41,9 @@ public class ChatController {
 
     @FXML
     public void initialize (){
+        startServer();
         startUsers();
+
         //System.out.println(listViewDevices);
         if (listViewDevices != null){
             listViewDevices.setCellFactory(param -> new ListCell<Users>() {
@@ -74,7 +77,7 @@ public class ChatController {
                     vboxChat.setVisible(true);
                     vboxChat.setManaged(true);
 
-                    System.out.println("Mostrando chat con: " + newVal.getNickname());
+                    ChatServer.setMessageListener(this::onMessageReceived);
                 } else {
                     // Si no hay selección, mostrar el mensaje por defecto
                     vboxDefault.setVisible(true);
@@ -84,6 +87,22 @@ public class ChatController {
                 }
             });
         }
+    }
+
+    private void onMessageReceived(Message message) {
+        // Asegurar que la UI se actualice en el hilo de JavaFX
+        Platform.runLater(() -> {
+            chatTextArea.appendText(message.getRemitente() + ": " + message.getTexto() + "\n");
+        });
+    }
+
+    private ChatServer chatServer;
+
+    @FXML
+    private void startServer() {
+        new Thread(() -> {
+            ChatServer.start();
+        }).start();
     }
 
     private void startUsers (){
