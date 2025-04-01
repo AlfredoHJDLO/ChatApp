@@ -1,10 +1,12 @@
 package com.eddy.chatapp.gui;
 
+import com.eddy.chatapp.core.Contactos;
 import com.eddy.chatapp.core.RedClient;
 import com.eddy.chatapp.core.RedServer;
 import com.eddy.chatapp.dao.MessageDAO;
 import com.eddy.chatapp.dao.MessageDAOImpl;
 import com.eddy.chatapp.dao.SQLiteConnector;
+import com.eddy.chatapp.dao.UsuarioDAOImpl;
 import com.eddy.chatapp.model.Message;
 import com.eddy.chatapp.model.Users;
 import javafx.application.Platform;
@@ -17,6 +19,7 @@ import javafx.scene.layout.VBox;
 
 import java.io.ByteArrayInputStream;
 import java.util.List;
+import java.util.Optional;
 
 public class nuevocController {
     private RedServer redServer;
@@ -71,12 +74,16 @@ public class nuevocController {
         listViewDevices.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
                 // Ocultar el VBox de "Selecciona un contacto" y mostrar el chat
-                vboxDefault.setVisible(false);
-                vboxDefault.setManaged(false);
-                vboxChat.setVisible(true);
-                vboxChat.setManaged(true);
+                Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
+                alerta.setTitle("Confirmación");
+                alerta.setHeaderText("Agregar contacto");
+                alerta.setContentText("¿Deseas agregar este usuario?");
 
-                System.out.println("Mostrando chat con: " + newVal.getNickname());
+                Optional<ButtonType> resultado = alerta.showAndWait();
+                if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
+                    UsuarioDAOImpl add1 = new UsuarioDAOImpl(new SQLiteConnector());
+                    add1.registro(newVal);
+                }
             } else {
                 // Si no hay selección, mostrar el mensaje por defecto
                 vboxDefault.setVisible(true);
