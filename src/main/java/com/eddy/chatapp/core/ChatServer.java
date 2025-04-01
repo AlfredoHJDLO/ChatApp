@@ -1,6 +1,6 @@
 package com.eddy.chatapp.core;
 
-import com.eddy.chatapp.dao.MySQLConnector;
+import com.eddy.chatapp.dao.SQLiteConnector;
 import com.eddy.chatapp.dao.MessageDAO;
 import com.eddy.chatapp.dao.MessageDAOImpl;
 import com.eddy.chatapp.model.Message;
@@ -26,7 +26,7 @@ public class ChatServer {
      */
     public static void main(String[] args) {
         // Usamos MySQLConnector como la conexión a la BD
-        messageDAO = new MessageDAOImpl(new MySQLConnector());
+        messageDAO = new MessageDAOImpl(new SQLiteConnector());
 
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
             System.out.println("📡 Servidor de chat activo en el puerto " + PORT);
