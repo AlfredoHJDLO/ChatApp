@@ -30,4 +30,7 @@ public interface UsuarioDAO {
             return null;
         }
     }
+    public boolean addContact(Users user);
+    public boolean deleteContact(String id);
+    public List<Users> listContacts();
 }

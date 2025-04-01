@@ -23,7 +23,7 @@ public class Inicializador {
 
         String createBlockedUsersTableSQL = "CREATE TABLE IF NOT EXISTS blocked_users ("
                 + "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + "mac_address TEXT NOT NULL)";
+                + "mac_address TEXT NOT NULL )";
 
         try (Connection connection = new SQLiteConnector().getConnection();
              Statement statement = connection.createStatement()) {

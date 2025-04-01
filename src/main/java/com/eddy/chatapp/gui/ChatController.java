@@ -91,7 +91,7 @@ public class ChatController {
             @Override
             protected Void call () throws Exception {
                 while (true) {
-                    Contactos contactosDAO = new Contactos(new SQLiteConnector()); // Crear instancia de Contactos
+                    Contactos contactosDAO = new Contactos(); // Crear instancia de Contactos
                     List<Users> contactos = contactosDAO.listContacts(); // Obtener contactos de la BD
                     System.out.println("Entrando");
 
