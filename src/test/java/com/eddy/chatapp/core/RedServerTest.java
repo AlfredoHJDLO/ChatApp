@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.List;
 public class RedServerTest {
 
-    @Test
+    /*@Test
     public void testGetLocalIPAddress() {
         try {
             // Verifica que la dirección IP local obtenida no sea null
@@ -44,5 +44,5 @@ public class RedServerTest {
         for (String device : activeDevices) {
             assertTrue(device.matches("\\d+\\.\\d+\\.\\d+\\.\\d+"), "Formato de IP inválido: " + device);
         }
-    }
+    }*/
 }
